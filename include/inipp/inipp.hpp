@@ -131,8 +131,8 @@ namespace inipp
             
             std::string line;
 
-            std::regex sectionParser(R"(^\s*\[([^\[\]]*)\]\s*$)");
-            std::regex kvParser(R"(^\s*([^=]+)\s*=\s*([^=]+)\s*$)");
+            std::regex sectionParser(R"(^\s*\[([^\[\];]*)\]\s*(;|$))");
+            std::regex kvParser(R"(^\s*([^=;]+)\s*=\s*([^=;]+)\s*(;|$))");
             std::regex strParser(R"(^"(.*)\"$)");
             std::regex intRule(R"(^(\+|-|)[0-9]+$)");
             std::regex floatRule(R"(^(\+|-|)([0-9]*\.[0-9]+|[0-9]+\.[0-9]*|[0-9]+)(e(\+|-|)[0-9]+|)$)");
