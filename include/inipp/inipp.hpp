@@ -101,10 +101,69 @@ namespace inipp
             Item(const Item& o): data_type() { *this = o; }
             Item(Item&& o) noexcept: data_type() { *this = o; }
 
-            int64_t asInt64() const { return *data.as_int64; }
-            double asFloat() const { return *data.as_float; }
-            std::string asStr() const { return *data.as_str; }
+            void except(ItemType et) const 
+            {
+                if (data_type != et)
+                {
+                    throw std::exception("Unmatched type");
+                }
+            }
+
+            int64_t asInt64() const { except(ItemType::Int64); return *data.as_int64; }
+            double asFloat() const { except(ItemType::Float); return *data.as_float; }
+            std::string asStr() const { except(ItemType::Str); return *data.as_str; }
             ItemType type() const { return data_type; }
+
+            std::vector<std::string> asStrArr(const std::string& split)
+            {
+                except(ItemType::Str);
+                std::regex splitRule("(^|" + split + ")(.+?)(" + split + "|$)");
+                std::string::const_iterator begin = data.as_str->begin();
+                std::string::const_iterator end = data.as_str->end();
+
+                std::smatch result;
+                std::vector<std::string> res;
+
+                while (std::regex_search(begin, end, result, splitRule))
+                {
+                    res.push_back(result[2]);
+                    begin = result[0].second;
+                }
+
+                return res;
+            }
+
+            std::vector<int64_t> asInt64Arr(const std::string& split)
+            {
+                const auto arr = asStrArr(split);
+
+                std::vector<int64_t> res;
+                for (const auto& s : arr)
+                {
+                    int64_t d;
+                    std::stringstream ss(s);
+                    ss >> d;
+                    res.push_back(d);
+                }
+
+                return res;
+            }
+
+            std::vector<double> asFloatArr(const std::string& split)
+            {
+                const auto arr = asStrArr(split);
+
+                std::vector<double> res;
+                for (const auto& s : arr)
+                {
+                    double d;
+                    std::stringstream ss(s);
+                    ss >> d;
+                    res.push_back(d);
+                }
+
+                return res;
+            }
         };
         typedef std::unordered_map<std::string, Item> Section;
         typedef std::unordered_map<std::string, Section> Content;
