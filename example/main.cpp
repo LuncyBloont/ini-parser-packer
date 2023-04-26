@@ -15,6 +15,8 @@ int main()
     std::cout << ini["Koko"]["name"] << std::endl;
     std::cout << ini["Apple"]["name"] << std::endl;
     std::cout << ini["Monkey Park"]["headers"] << std::endl;
+    std::cout << ini.get("Koko", "set") << std::endl;
+    std::cout << ini.get("apple", "name") << std::endl;
 
     for (const auto& e : ini["Monkey Park"]["headers"].asStrArr(","))
     {

@@ -240,6 +240,19 @@ namespace inipp
         Content::iterator find(const std::string& sectionName) { return content.find(sectionName); }
         Content::const_iterator find(const std::string& sectionName) const { return content.find(sectionName); }
         Section& operator[](const std::string& sectionName) { return content[sectionName]; }
+        const Item* get(const std::string& sname, const std::string& key) const
+        {
+            const auto section = content.find(sname);
+            if (section != content.end())
+            {
+                const auto kv = section->second.find(key);
+                if (kv != section->second.end())
+                {
+                    return &kv->second;
+                }
+            }
+            return nullptr;
+        }
         
         Content::iterator end() { return content.end(); }
         Content::const_iterator end() const { return content.end(); }
