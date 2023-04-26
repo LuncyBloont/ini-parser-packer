@@ -191,8 +191,8 @@ namespace inipp
             std::string line;
 
             std::regex sectionParser(R"(^\s*\[([^\[\];]*)\]\s*(;|$))");
-            std::regex kvParser(R"(^\s*([^=;]*)\s*=\s*([^=;]*)\s*(;|$))");
-            std::regex strParser(R"(^"(.*)\"$)");
+            std::regex kvParser(R"(^\s*([^=;]*)\s*=\s*(".*"|'.*'|[^=]*?)\s*(;.*|$))");
+            std::regex strParser(R"(^(".*"|'.*')$)");
             std::regex intRule(R"(^(\+|-|)[0-9]+$)");
             std::regex floatRule(R"(^(\+|-|)([0-9]*\.[0-9]+|[0-9]+\.[0-9]*|[0-9]+)(e(\+|-|)[0-9]+|)$)");
 
@@ -211,7 +211,8 @@ namespace inipp
                     std::string v = result[2];
                     if (std::regex_match(v, result, strParser))
                     {
-                        v = result[1];
+                        v = result[1].str();
+                        v = v.substr(1, v.size() - 2);
                         current->insert(std::make_pair(k, v));
                     }
                     else if (std::regex_match(v, intRule))
