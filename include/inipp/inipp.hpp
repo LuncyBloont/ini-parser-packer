@@ -185,11 +185,6 @@ namespace inipp
         {
             open(stream);
         }
-        
-        void open(std::istream& stream)
-        {
-            open(std::move(stream));
-        }
 
         void open(std::istream&& stream)
         {
@@ -245,6 +240,11 @@ namespace inipp
                     }
                 }
             }
+        }
+        
+        void open(std::istream& stream)
+        {
+            open(std::move(stream));
         }
 
         Content::iterator find(const std::string& sectionName) { return content.find(sectionName); }
