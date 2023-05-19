@@ -35,6 +35,13 @@ int main()
         std::cout << e << "; ";
     }
     std::cout << std::endl;
+
+    inipp::Ini ini2;
+
+    std::ifstream("./test0.ini") >> ini2;
+
+    std::cout << "\nini2: " << std::endl;
+    std::cout << ini2;
     
     return 0;
 }

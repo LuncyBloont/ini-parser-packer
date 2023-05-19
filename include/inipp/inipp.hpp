@@ -15,6 +15,7 @@ namespace inipp
     class Ini
     {
         friend std::ostream& operator<<(std::ostream& stream, const inipp::Ini& ini);
+        friend std::ostream& operator<<(std::ostream&& stream, const inipp::Ini& ini);
         
     public:
         class Item
@@ -180,8 +181,17 @@ namespace inipp
         {
             open(stream);
         }
-
+        explicit Ini(std::istream&& stream, std::string unnamed = "unnamed"): unnamed(std::move(unnamed))
+        {
+            open(stream);
+        }
+        
         void open(std::istream& stream)
+        {
+            open(std::move(stream));
+        }
+
+        void open(std::istream&& stream)
         {
             content.clear();
 
@@ -260,7 +270,7 @@ namespace inipp
         Content::const_iterator begin() const { return content.begin(); }
     };
     
-    inline std::ostream& operator<<(std::ostream& stream, const Ini::Item& item)
+    inline std::ostream& operator<<(std::ostream&& stream, const Ini::Item& item)
     {
         switch (item.type())
         {
@@ -277,7 +287,12 @@ namespace inipp
         return stream;
     }
 
-    inline std::ostream& operator<<(std::ostream& stream, const Ini& ini)
+    inline std::ostream& operator<<(std::ostream& stream, const Ini::Item& item)
+    {
+        return std::move(stream) << item;
+    }
+
+    inline std::ostream& operator<<(std::ostream&& stream, const Ini& ini)
     {
         for (const auto& sec : ini.content)
         {
@@ -291,7 +306,18 @@ namespace inipp
         return stream;
     }
 
+    inline std::ostream& operator<<(std::ostream& stream, const Ini& ini)
+    {
+        return std::move(stream) << ini;
+    }
+
     inline std::istream& operator>>(std::istream& stream, Ini& ini)
+    {
+        ini.open(stream);
+        return stream;
+    }
+
+    inline std::istream& operator>>(std::istream&& stream, Ini& ini)
     {
         ini.open(stream);
         return stream;
