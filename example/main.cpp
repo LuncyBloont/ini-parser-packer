@@ -42,6 +42,31 @@ int main()
 
     std::cout << "\nini2: " << std::endl;
     std::cout << ini2;
+
+    const inipp::Ini ini3 = ini2;
+
+    std::cout << "\nini3: " << std::endl;
+    std::cout << ini3;
+    
+    std::cout << "\nini3 test: " << std::endl;
+
+    for (const auto& e : ini3.get("Monkey Park", "headers")->asStrArr(","))
+    {
+        std::cout << e << "; ";
+    }
+    std::cout << std::endl;
+
+    for (const auto& e : ini3.get("Monkey Park", "age")->asInt64Arr("-"))
+    {
+        std::cout << e << "; ";
+    }
+    std::cout << std::endl;
+
+    for (const auto& e : ini3.get("Monkey Park", "height")->asFloatArr("\\|-\\|"))
+    {
+        std::cout << e << "; ";
+    }
+    std::cout << std::endl;
     
     return 0;
 }
