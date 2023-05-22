@@ -115,7 +115,7 @@ namespace inipp
             std::string asStr() const { except(ItemType::Str); return *data.as_str; }
             ItemType type() const { return data_type; }
 
-            std::vector<std::string> asStrArr(const std::string& split)
+            std::vector<std::string> asStrArr(const std::string& split) const
             {
                 except(ItemType::Str);
                 std::regex splitRule("(^|" + split + ")(.+?)(" + split + "|$)");
@@ -134,7 +134,7 @@ namespace inipp
                 return res;
             }
 
-            std::vector<int64_t> asInt64Arr(const std::string& split)
+            std::vector<int64_t> asInt64Arr(const std::string& split) const
             {
                 const auto arr = asStrArr(split);
 
@@ -150,7 +150,7 @@ namespace inipp
                 return res;
             }
 
-            std::vector<double> asFloatArr(const std::string& split)
+            std::vector<double> asFloatArr(const std::string& split) const
             {
                 const auto arr = asStrArr(split);
 
